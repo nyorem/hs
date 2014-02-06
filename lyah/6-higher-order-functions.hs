@@ -57,6 +57,7 @@ f = map fst [(1,2), (2, 3), (3, 4)]
 r = map (replicate 3) [1..10]
 
 -- filter : keep things in a list that verify a predicate
+-- WARNING: does not work well with infinite lists -> takeWhile
 filter' :: (a -> Bool) -> [a] -> [a]
 filter' _ [] = []
 filter' f (x:xs)
@@ -145,3 +146,75 @@ reverseBis :: [a] -> [a]
 reverseBis = foldl (\acc x -> x : acc) []
 
 -- WARNING: folds are used when we traversed a list once element by element and return something based on that
+
+-- foldl1 and foldr1 variants : same like foldl and foldr except the starting value is the first element of the list
+-- WARNING: throw a runtime error when run on an empty list
+sum'' :: (Num a) => [a] -> a
+sum'' = foldl1 (+)
+
+maximum' :: (Ord a) => [a] -> a
+maximum' = foldl1 (\acc x -> if x > acc then x else acc)
+
+reverse'' :: [a] -> [a]
+reverse'' = foldl (\acc x -> x : acc) [] -- <=> foldl (flip (:)) []
+
+product'' :: (Num a) => [a] -> a
+product'' = foldl1 (*)
+
+filter'' :: (a -> Bool) -> [a] -> [a]
+filter'' p = foldr (\x acc -> if p x then x : acc else acc) []
+
+head'' :: [a] -> a
+head'' = foldr1 (\x _ -> x)
+
+last'' :: [a] -> a
+last'' = foldl1 (\_ x -> x)
+
+-- scanl and scanr : like foldl and foldr except they print every intermediate value of the accumulator
+-- scanl1 and scanr1 also exist
+-- examples
+a = scanl1 (+) [1 .. 10]
+b = scanr1 (+) [1 .. 10]
+aa = scanl1 (\acc x -> if x > acc then x else acc) [1, 3, 9, 0, 8, 11, 9]
+
+-- WARNING: used to monitor the progression of a function that can be implemented with a fold
+
+-- exercise : How many elements does it take for the sum of the roots of all natural numbers to exceed 1000 ?
+res5 = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
+
+-- function application with $
+-- $ has the lowest precedence and right associative /= ' ' which has the high precedence
+-- $ = opening parentheses to the end of the expression
+-- used to not right extra parentheses
+dollar = sum $ map sqrt [1..30]
+dollar2 = sqrt $ 3 + 4 + 9
+-- f (g (z x)) <-> f $ g $ z x
+dollar3 = sum $ filter (>30) $ map (^2) [1..10]
+-- ($) is a function!
+funList = map ($ 4) [(+3), (+4), sqrt]
+
+-- function composition with .
+-- negate : opposite of the number
+comp1 = map (negate . abs) [-10..10]
+-- '.' is right associative : (f . g . h) x = f (g (h x))
+-- WARNING: if we have multiple parameters => last parameter of the innermost function after a $ and then put dots between others functions (without their last parameter)
+-- replicate 100 (product (map (*3) (zipWith max [1,2,3,4,5] [4,5,6,7,8]))) turns into :
+comp2 = replicate 100 . product . map (*3) . zipWith max [1, 2, 3, 4, 5] $ [4, 5, 6, 7, 8]
+
+-- point free style : currying functions
+-- sum xs = foldl (+) 0 xs ==> sum = foldl (+) 0
+fn x = ceiling (negate (tan (cos (max 50 x))))
+fnFree = ceiling . negate . tan . cos . max 50
+
+-- point-free : more readable and concise if the function is not very complex
+oddSquareSum :: Integer
+oddSquareSum = sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
+
+oddSquareSumFree :: Integer
+oddSquareSumFree = sum . takeWhile (<10000) . filter odd . map (^2) $ [1..]
+
+-- too much composition : use let bindings to give name to intermediate results
+oddSquareSumFreeBis :: Integer
+oddSquareSumFreeBis = let oddSquares = filter odd $ map (^2) [1..];
+			  belowLimit = takeWhile (<10000) oddSquares
+		      in sum belowLimit
