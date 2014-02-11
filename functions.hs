@@ -43,6 +43,13 @@ gcd' a b
 	| a < b = gcd a (b-a)
 	| otherwise = gcd (a-b) b
 
+-- fibonacci
+fibs :: [Integer]
+fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
+
+fibo :: Int -> Integer
+fibo n = fibs !! n
+
 ----------
 -- SORT --
 ----------
