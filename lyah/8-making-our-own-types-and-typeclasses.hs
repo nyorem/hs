@@ -1,0 +1,1 @@
+-- first example : data Bool = True | False
