@@ -3,7 +3,11 @@ Some `Haskell`
 
 ## lyah
 
-Contain files I created to follow the [Learn You a Haskell](http://learnyouahaskell.com) tutorial
+contain files I created to follow the [Learn You a Haskell](http://learnyouahaskell.com) tutorial
+
+## real-world
+
+files related to [Real world Haskell](http://book.realworldhaskell.org/)
 
 ## euler
 

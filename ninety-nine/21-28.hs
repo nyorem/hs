@@ -21,3 +21,9 @@ range'' :: (Ord a, Enum a) => a -> a -> [a]
 range'' down up
 	| down == up = [up]
 	| otherwise = down : range'' ((if down <= up then succ else pred) down) up
+
+-- problem 26 : generate k combinations from a list
+combinations :: Int -> [a] -> [[a]]
+combinations 0 _ = [[]]
+combinations _ [] = []
+combinations k (x:xs) = (combinations k xs) ++ (map (x :) $ combinations (k-1) xs)

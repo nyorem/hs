@@ -61,3 +61,5 @@ primeFactorsMult n = let decompo = primeFactors n; x = head decompo; xs = tail d
 -- problem 37 : compute euler's totient function using the prime decomposition
 totientImproved :: Integer -> Integer
 totientImproved n = product [(p - 1) * p ^ (m - 1) | (p, m) <- primeFactorsMult n]
+
+-- problem 39 : given the lower and upper limit, construct a list of prime numbers in this range

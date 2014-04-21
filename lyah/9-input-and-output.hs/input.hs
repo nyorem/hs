@@ -1,6 +1,6 @@
 -- simple IO program
 
--- do syntax is used to glue together multiple IO actions beacuase by default we can only do ONE action
+-- do syntax is used to glue together multiple IO actions becuase by default we can only do ONE action
 -- each step in a do block is an IO
 -- the type of the action is the type of the last action which is IO () here
 -- WARNING: by convention, we do not specify the type of main but it must be like main :: IO sth
