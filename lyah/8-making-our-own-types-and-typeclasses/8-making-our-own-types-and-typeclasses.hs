@@ -175,3 +175,33 @@ f = Red
 -- ex: instance (Show a) => Maybe a where
 
 -- WARNING: :info shows the functions thate we have to override when making an instance of a typeclass, the type of a function or the instances defined for a specific type
+
+-- Functor typeclass : things that can be mapped over
+-- ex: lists...
+-- see: functor.hs
+
+-- kinds
+-- functions take values, can be curryfied just like types can be
+-- kind: type of a type
+-- :k in ghci
+-- '*': concrete type (like Int, Maybe Int...)
+-- '* -> *': take on type parameter and constructs a type (like Maybe...)
+-- Functor works for types of kind * -> *
+
+-- type-foo:
+class Tofu t where
+    tofu :: j a -> t a j
+-- kinds:
+    -- j a is a value so j : * -> * and a : *
+    -- t a j is a value so t : * -> (* -> *) -> *
+-- example of type which kind is the same as t must be
+data Frank a b = Frank {frankField :: b a} deriving (Show)
+-- kinds:
+    -- b a must be a value so b : * -> * and a: *
+    -- so Frank : * -> (* -> *) -> *
+frank1 = Frank {frankField = Just 5}
+
+instance Tofu Frank where
+    tofu x = Frank x
+
+-- TO BE CONTINUED
