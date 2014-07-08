@@ -1,8 +1,6 @@
 module Main where
 
-import Data.List ( words )
-
-solveRPN :: (Num a, Read a) => String -> a
+solveRPN :: String -> Float
 solveRPN = head . foldl foldingFunction [] . words
     where foldingFunction (x:y:xs) "*" = (x * y) : xs
           foldingFunction (x:y:xs) "+" = (x + y) : xs
