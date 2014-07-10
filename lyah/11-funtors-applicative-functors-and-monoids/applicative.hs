@@ -50,7 +50,7 @@ main = do
 
     -- ((->) r) is an instance of Applicative (rarely used)
     -- pure x = (\_ -> x)
-    -- f <*> g = \x -> (f x) (g x)
+    -- f <*> g = \x -> f x (g x): it applies x to all the functions and create a function that will return this result
     -- ex: (+) <$> (+3) <*> (* 500) $ 5 == (5 + 3) + (5 * 500) = 2508
     -- (\x y z -> [x, y, z]) <$> (+2) <*> (*2) <*> (/2) $ 5 = [7.0, 10.0, 2.5]
     -- explanation: k <$> f <*> g : call k with the eventual results of f and g
@@ -63,4 +63,27 @@ main = do
     -- ex: getZipList $ (+) <$> ZipList [1, 2, 3] <*> ZipList [1, 2, 3]
     -- TIPS: (,) and (,,) funtion for creating pairs and triples
 
+    -- liftA2 function: lifts a normal binary function to a function that operates on two applicative functors
+    -- liftA2 f a b = f <$> a <*> b
+    -- sequenceA is useful when dealing with things satisfiying predicates
+    -- and $ map ($ 5) [odd, (<7)] == sequenceA [odd, (<7)] 5
+    -- when used with lists: it is uste like list by comprehension
+    -- sequenceA [[1, 2], [3, 4]] == [[1, 3], [1, 4], [2, 3], [2, 4]]
+    -- when used with IO actions: sequenceA = sequence
+
+    -- laws of applicative functors:
+    -- pure id <*> v = v
+    -- pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
+    -- pure f <*> pure x = pure (f x)
+    -- u <*> pure y = pure ($ y) <*> u
+
     return ()
+
+-- sequenceA function
+sequenceA :: (Applicative f) => [f a] -> f [a]
+sequenceA [] = pure []
+sequenceA (x:xs) = liftA2 (:) x (sequenceA xs)
+
+sequenceA' :: (Applicative f) => [f a] -> f [a]
+sequenceA' = foldr (liftA2 (:)) (pure [])
+

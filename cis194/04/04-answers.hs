@@ -62,6 +62,10 @@ map' :: (a -> b) -- ^ The function to map
      -> [b]      -- ^ The output list where each element is the input list with the function mapped on
 map' f = foldr (\x acc -> f x : acc) []
 
+-- | foldl using foldr.
+myFoldl :: (b -> a -> b) -> b -> [a] -> b
+myFoldl f base xs = foldr (flip f) base (reverse xs)
+
 -- ex 4
 -- | Computes the Sieve of Sundaram (http://en.wikipedia.org/wiki/Sieve_of_Sundaram).
 -- For a given n, it computes all the odd prime numbers until 2 * n + 2.
