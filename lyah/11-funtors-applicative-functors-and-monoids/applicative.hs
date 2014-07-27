@@ -50,7 +50,7 @@ main = do
 
     -- ((->) r) is an instance of Applicative (rarely used)
     -- pure x = (\_ -> x)
-    -- f <*> g = \x -> f x (g x): it applies x to all the functions and create a function that will return this result
+    -- f <*> g = \x -> f x (g x) (f is a function which returns a function): it applies x to all the functions and create a function that will return this result
     -- ex: (+) <$> (+3) <*> (* 500) $ 5 == (5 + 3) + (5 * 500) = 2508
     -- (\x y z -> [x, y, z]) <$> (+2) <*> (*2) <*> (/2) $ 5 = [7.0, 10.0, 2.5]
     -- explanation: k <$> f <*> g : call k with the eventual results of f and g

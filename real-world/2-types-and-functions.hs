@@ -21,7 +21,7 @@ myDrop n (x:xs)
 	| n <= 0 = []
 	| otherwise = myDrop (n-1) xs
 
--- || is lazy (short circuit) => built-in because of the non-strict evaluation of Haskell
+-- '||' is lazy (short circuit) => built-in because of the non-strict evaluation of Haskell
 
 -- lazy evaluation : it reports the evaluation of thunks till it is really needed
 -- the result of a function may be a thunk (ghci needs to evaluate it in order to prin t it on the screen)
@@ -36,3 +36,4 @@ lastButOne [x] = error "lastButOne"
 lastButOne (x:y:xs)
 	| null xs = x
 	| otherwise = lastButOne (y:xs)
+

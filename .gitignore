@@ -6,9 +6,8 @@
 *.o
 
 sandbox/*
-TODO
-
 projects/*
+TODO
 
 lyah/9-input-and-output/todo.txt
 cis194/**/*.pdf

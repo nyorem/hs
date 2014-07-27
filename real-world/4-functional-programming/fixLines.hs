@@ -28,4 +28,5 @@ splitLines cs =
 
 -- check if a character is a line terminator : carriage return or newline
 isLineTerminator :: Char -> Bool
-isLineTerminator c = c == '\r' || c == '\n'
+isLineTerminator = (`elem` ['\r', '\n'])
+
