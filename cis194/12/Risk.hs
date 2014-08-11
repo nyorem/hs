@@ -6,7 +6,7 @@ import Control.Monad.Random
 
 import Data.List ( sortBy )
 import Data.Function ( on )
-import Control.Monad ( unless )
+import Control.Monad ( replicateM )
 
 ------------------------------------------------------------
 -- Die values
@@ -30,12 +30,13 @@ die = getRandom
 type Army = Int
 
 data Battlefield = Battlefield { attackers :: Army, defenders :: Army }
+                 deriving (Show)
 
 -- ex 2
 
 -- | Simulate the roll of n dice.
 dice :: Int -> Rand StdGen [DieValue]
-dice n = sequence (replicate n die)
+dice n = replicateM n die
 
 -- | Maximum number of units that an attacker can use.
 attackerUnits :: Army -> Army
@@ -66,23 +67,25 @@ battle b = do
 
     -- Matches up in pairs
     let dicePairs = zip aDice dDice
-        lostDUnits = length $ filter (\(a, b) -> a > b) dicePairs
+        lostDUnits = length $ filter (uncurry (>)) dicePairs
         lostAUnits = (length dicePairs) - lostDUnits
 
     -- Computes the new battlefied
     return $ Battlefield ((attackers b) - lostAUnits) ((defenders b) - lostDUnits)
 
 -- ex 3
--- | Predicate to tell when an invasion is over.
-noMoreBattle :: Battlefield -> Bool
-noMoreBattle b = (attackers b) <= 2 || (defenders b) == 0
-
 -- | Keeps battle until there are no defenders remaining or fewer than two attackers.
 invade :: Battlefield -> Rand StdGen Battlefield
-invade b = do
-    bb <- battle b
-    if noMoreBattle bb then return bb
-    else invade bb
+invade b
+    | attackers b < 2 || defenders b <= 1 = return b
+    | otherwise = (battle b) >>= invade
 
 -- ex 4
+-- | Runs invade 1000 times and returns a success probability.
+successProb :: Battlefield -> Rand StdGen Double
+successProb b = do
+    finalB <- replicateM 1000 (invade b)
+    let r = fromIntegral . length . filter (\b -> (defenders b) == 1) $ finalB
+        all = fromIntegral . length $ finalB
+    return (r / all)
 
