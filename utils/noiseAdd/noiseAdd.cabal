@@ -1,0 +1,21 @@
+name:                noiseAdd
+version:             0.1.0.0
+synopsis:            Add a noise to a point set.
+description:         For a point set given in a xyz file and a (mean, standard deviation), the program will add noise which follow a normal distribution to every point.
+license:             MIT
+license-file:        LICENSE
+author:              Jocelyn MEYRON
+maintainer:          Jocelyn.Meyron@ensimag.grenoble-inp.fr
+category:            Math
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable noiseAdd
+  main-is:             noiseAdd.hs
+  ghc-options:         -Wall
+  build-depends:       base >=4.7 && <4.8,
+                       parsec,
+                       ParsecTools,
+                       statistics,
+                       mwc-random
+  default-language:    Haskell2010

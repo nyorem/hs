@@ -1,3 +1,5 @@
+module Main where
+
 import Statistics.Distribution
 import Statistics.Distribution.Normal
 import System.Random.MWC
@@ -47,7 +49,7 @@ main = do
     -- parse and noise the file
     let fileParsed = parseFile cont
 
-    forM fileParsed (\(x, y, z) -> do
+    _ <- forM fileParsed (\(x, y, z) -> do
         n <- genNoise (read m) (read sd)
         putStrLn $ convertToXYZ (x + n, y + n, z + n))
 

@@ -1,0 +1,19 @@
+name:                delaySRT
+version:             0.1.0.0
+synopsis:            Add or subtract time from an SRT file.
+description:         Given a subtiles file with the SRT format, the program can add or subtract a given time to it.
+license:             MIT
+license-file:        LICENSE
+author:              Jocelyn MEYRON
+maintainer:          Jocelyn.Meyron@ensimag.grenoble-inp.fr
+category:            Text
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable delaySRT
+  main-is:             Main.hs
+  ghc-options:         -Wall
+  build-depends:       base >=4.7 && <4.8,
+                       parsec,
+                       ParsecTools
+  default-language:    Haskell2010

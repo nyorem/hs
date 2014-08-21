@@ -67,8 +67,8 @@ convertFromMs t = Time h m s ms
           (m, dm) = helper dh (60 * 1000)
           (s, ds) = helper dm 1000
           (ms, _) = helper ds 1
-          helper a n = (s, d)
-            where s = a `div` n
+          helper a n = (b, d)
+            where b = a `div` n
                   d = a - s * n
 
 -- | Adds two times.
@@ -90,24 +90,24 @@ data SRTLine = SRTLine Index Time Time Subtitle
 
 -- Shows correctly an srt line.
 instance Show SRTLine where
-    show (SRTLine id beginTime endTime subtitle) = concat [show id,
-                                                           "\n",
-                                                           show beginTime,
-                                                           " --> ",
-                                                           show endTime,
-                                                           "\n",
-                                                           subtitle,
-                                                           "\n"]
+    show (SRTLine ident beginTime endTime subtitle) = concat [show ident,
+                                                              "\n",
+                                                              show beginTime,
+                                                              " --> ",
+                                                              show endTime,
+                                                              "\n",
+                                                              subtitle,
+                                                              "\n"]
 
 -- | Adds a time to a srt line.
 addTimeSRTLine :: Time -> SRTLine -> SRTLine
-addTimeSRTLine t (SRTLine id begin end sub) = SRTLine id nbegin nend sub
+addTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident nbegin nend sub
     where nbegin = addTimes begin t
           nend   = addTimes end t
 
 -- | Subtracts a time to a srt line.
 subTimeSRTLine :: Time -> SRTLine -> SRTLine
-subTimeSRTLine t (SRTLine id begin end sub) = SRTLine id nbegin nend sub
+subTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident nbegin nend sub
     where nbegin = subTimes begin t
           nend   = subTimes end t
 
@@ -135,11 +135,11 @@ arrow = string "-->"
 parseTime :: Parser Time
 parseTime = do
     hours <- parseIntegral
-    colon
+    _ <- colon
     minutes <- parseIntegral
-    colon
+    _ <- colon
     seconds <- parseIntegral
-    comma
+    _ <- comma
     milliseconds <- parseIntegral
     return (Time hours minutes seconds milliseconds)
 
@@ -147,13 +147,13 @@ parseTime = do
 parseSRTLine :: Parser SRTLine
 parseSRTLine = do
     index <- parseIntegral
-    newline
+    _ <- newline
     begin <- parseTime
-    spaces
-    arrow
-    spaces
+    _ <- spaces
+    _ <- arrow
+    _ <- spaces
     end <- parseTime
-    newline
+    _ <- newline
     sub <- manyTill anyChar (try (string "\n\n"))
     return (SRTLine index begin end sub)
 

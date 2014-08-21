@@ -11,3 +11,8 @@ TODO
 
 lyah/9-input-and-output/todo.txt
 cis194/**/*.pdf
+nicta/
+
+**/.cabal-sandbox/
+**/cabal.sandbox.config
+**/dist
