@@ -37,5 +37,4 @@ s = Map.size nn
 
 -- toList : inverse of fromList
 
-
 -- keys / elems : return a list of the keys or the values

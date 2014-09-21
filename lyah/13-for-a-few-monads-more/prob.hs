@@ -1,7 +1,7 @@
 import Data.Ratio
 import Control.Applicative
 import Data.List ( all, sortBy, groupBy )
-import Data.Function ( on )
+import Data.Ord ( comparing )
 
 -- type for representing non determinism with probabilities:
 -- -> list of pairs (x, p)
@@ -35,7 +35,7 @@ flatten (Prob xs) = Prob $ concat $ map multAll xs
 -- join probabilities with the same outcomes
 flattenOutcomes :: (Ord a) => Prob a -> Prob a
 flattenOutcomes (Prob xs) =
-     Prob . concat . map sumProb . groupBy (\(x, _) (y, _) -> x == y) . sortBy (compare `on` fst) $ xs
+     Prob . concat . map sumProb . groupBy (\(x, _) (y, _) -> x == y) . sortBy (comparing fst) $ xs
          where sumProb ys = [(fst . head $ ys, sum $ map snd ys)]
 
 instance Monad Prob where

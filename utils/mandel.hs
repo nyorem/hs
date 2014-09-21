@@ -5,7 +5,6 @@ module Main where
 import Control.Monad ( unless, when )
 import Graphics.Rendering.OpenGL
 import qualified Graphics.UI.GLFW as W
-import Unsafe.Coerce ( unsafeCoerce )
 import System.Exit ( exitFailure, exitSuccess )
 import System.IO ( hPutStrLn, stderr )
 
@@ -14,7 +13,7 @@ width = 320
 height = 320
 
 coerce :: GLfloat -> Int
-coerce f = round (unsafeCoerce f :: Float)
+coerce f = round (realToFrac f :: Float)
 
 -- we define our own Complex data type
 data Complex = Complex { re :: GLfloat, im :: GLfloat } deriving (Show, Eq)

@@ -16,3 +16,5 @@ nicta/
 **/.cabal-sandbox/
 **/cabal.sandbox.config
 **/dist
+
+utils/mandel
