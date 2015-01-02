@@ -4,6 +4,7 @@
 .*.swp
 *.hi
 *.o
+*.prof
 
 sandbox/*
 projects/*
