@@ -1,29 +1,27 @@
-Some `Haskell`
+Haskell stuff
 -----------
 
-## cis194
+### cis194
+
 solutions of [cis194](http://www.seas.upenn.edu/%7Ecis194/lectures.html) homeworks
 
-## euler
+### euler
 
-solutions of [Project Euler](http://projecteuler.net) problems (in Haskell of course)
+solutions of [Project Euler](http://projecteuler.net) problems
 
-## utils
+### lyah
 
-some  utility functions I wrote
+[Learn You a Haskell](http://learnyouahaskell.com)
 
-* *noiseAdd*: add noise to a point set described by an `xyz` file
-* *dealySRT*: add or subtract delay to a `srt` subtitles file
-
-## lyah
-
-files related to the [Learn You a Haskell](http://learnyouahaskell.com) tutorial
-
-## ninety-nine
+### ninety-nine
 
 solutions of [99 Questions](http://www.haskell.org/haskellwiki/99_questions)
 
+### utils
 
-## real-world
+some  utility programs:
 
-files related to [Real world Haskell](http://book.realworldhaskell.org/) tutorial
+* *noiseAdd*: add noise to a point set described by an `xyz` file
+* *delaySRT*: add or subtract delay to a `srt` subtitles file
+* *kmeans*: (a not efficient) `kmeans` algorithm
+* *lsystem*: `L-system grammars` (koch curve, dragon curve)
