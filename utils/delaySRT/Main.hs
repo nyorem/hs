@@ -6,10 +6,6 @@ import System.Environment ( getArgs, getProgName )
 usage :: String -> String
 usage prog = unwords ["Usage:", "./" ++ prog, "old", "new", "time"]
 
--- TODO:
--- -> simplify Main: remove conditions
--- -> abstracts addTimes and subTimes
-
 main :: IO ()
 main = do
     args <- getArgs
@@ -19,12 +15,7 @@ main = do
     else do
         let (filename:newFilename:time:_) = args
         srt <- parseSRT filename
-        if head time == '-' then do
-            let delayTime = constructTimeFromStr (tail time)
-                newSrt    = applyToSRTLine (subTimeSRTLine delayTime) srt
-            writeFile newFilename (show newSrt)
-        else do
-            let delayTime = constructTimeFromStr time
-                newSrt    = applyToSRTLine (addTimeSRTLine delayTime) srt
-            writeFile newFilename (show newSrt)
+        let delayTime = parseTime $ if isTimeNegative time then tail time else time
+            newSrt = (if isTimeNegative time then forwardSRTFile else delaySRTFile) delayTime srt
+        writeFile newFilename (show newSrt)
 

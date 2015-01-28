@@ -1,16 +1,78 @@
-module SRTFile (
-                 Time(..),
-                 parseSRT,
-                 addTimeSRTLine,
-                 subTimeSRTLine,
-                 constructTimeFromStr,
-                 applyToSRTLine,
+{-# OPTIONS_GHC -fno-warn-unused-do-bind #-}
+
+module SRTFile ( Time
+               , parseTime
+               , isTimeNegative
+               , parseSRT
+               , delaySRTFile
+               , forwardSRTFile
                )
 where
 
 import Text.Parsec
-import Text.Parsec.String
-import Text.Parsec.Numbers ( parseIntegral )
+import Text.Parsec.String ( Parser )
+
+-- | Time: HH:MM:SS,MMM
+data Time = Time Int Int Int Int
+
+-- | Shows a number with a specific number of digits.
+showWithDigits :: Int -> Int -> String
+showWithDigits n digits
+    | l == digits = s
+    | otherwise = replicate (digits - l) '0' ++ s
+        where s = show n
+              l = length s
+
+-- | Shows correctly a time: HH:MM:SS,MMM
+instance Show Time where
+    show (Time h m s ms) = concat [ showWithDigits h 2
+                                  , ":"
+                                  , showWithDigits m 2
+                                  , ":"
+                                  , showWithDigits s 2
+                                  , ","
+                                  , showWithDigits ms 3
+                                  ]
+
+-- | Tests if a time is negative.
+isTimeNegative :: String -> Bool
+isTimeNegative t = head t == '-'
+
+-- | Parses a String to a Time.
+parseTime :: String -> Time
+parseTime str =
+    case parse time "" str of
+        Left err -> error $ show err
+        Right t -> t
+
+-- | Converts a Time to a number of milliseconds.
+convertToMs :: Time -> Int
+convertToMs (Time h m s ms) = ms + s * 1000 + m * 60 * 1000 + h * 3600 * 1000
+
+-- | Converts a number of milliseconds to a Time.
+convertFromMs :: Int -> Time
+convertFromMs t = Time h m s ms
+    where (h, dh) = helper t (3600 * 1000)
+          (m, dm) = helper dh (60 * 1000)
+          (s, ds) = helper dm 1000
+          (ms, _) = helper ds 1
+          helper a n = (b, d)
+            where b = a `div` n
+                  d = a - b * n
+
+-- | Zips two times.
+zipTimes :: (Int -> Int -> Int) -> Time -> Time -> Time
+zipTimes f t1 t2 = convertFromMs (mt1 `f` mt2)
+    where mt1 = convertToMs t1
+          mt2 = convertToMs t2
+
+-- | Adds two times.
+addTimes :: Time -> Time -> Time
+addTimes = zipTimes (+)
+
+-- | Subtracts two times.
+subTimes :: Time -> Time -> Time
+subTimes = zipTimes subtract
 
 -- format of an srt file:
 -- index\n
@@ -23,101 +85,29 @@ import Text.Parsec.Numbers ( parseIntegral )
 -- Sync and corrections by n17t01
 -- www.addic7ed.com
 
--- Time: HH:MM:SS,MMM
-type Hours = Int
-type Minutes = Int
-type Seconds = Int
-type Milliseconds = Int
-data Time = Time Hours Minutes Seconds Milliseconds
+-- | A 'line' of an srt file
+data SRTLine = SRTLine Int Time Time String
 
--- | Shows a number with a specific number of digits.
-showWithDigits :: Int -> Int -> String
-showWithDigits n digits
-    | l == digits = s
-    | otherwise = replicate (digits - l) '0' ++ s
-        where s = show n
-              l = length s
-
--- Shows correctly a time.
-instance Show Time where
-    show (Time h m s ms) = concat [showWithDigits h 2,
-                                   ":",
-                                   showWithDigits m 2,
-                                   ":",
-                                   showWithDigits s 2,
-                                   ",",
-                                   showWithDigits ms 3]
-
--- | Buils a Time structure from a string.
-constructTimeFromStr :: String -> Time
-constructTimeFromStr str =
-    case ret of
-        Left err -> error $ show err
-        Right t -> t
-    where ret = parse parseTime "" str
-
--- | Convert a Time to a number of milliseconds.
-convertToMs :: Time -> Int
-convertToMs (Time h m s ms) = ms + s * 1000 + m * 60 * 1000 + h * 3600 * 1000
-
--- | Convert a number of milliseconds to a Time.
-convertFromMs :: Int -> Time
-convertFromMs t = Time h m s ms
-    where (h, dh) = helper t (3600 * 1000)
-          (m, dm) = helper dh (60 * 1000)
-          (s, ds) = helper dm 1000
-          (ms, _) = helper ds 1
-          helper a n = (b, d)
-            where b = a `div` n
-                  d = a - s * n
-
--- | Adds two times.
-addTimes :: Time -> Time -> Time
-addTimes t1 t2 = convertFromMs (mt1 + mt2)
-    where mt1 = convertToMs t1
-          mt2 = convertToMs t2
-
--- | Subtracts two times.
-subTimes :: Time -> Time -> Time
-subTimes t1 t2 = convertFromMs (mt1 - mt2)
-    where mt1 = convertToMs t1
-          mt2 = convertToMs t2
-
--- A 'line' of an srt file
-type Index = Int
-type Subtitle = String
-data SRTLine = SRTLine Index Time Time Subtitle
-
--- Shows correctly an srt line.
+-- | Shows correctly an srt line.
 instance Show SRTLine where
-    show (SRTLine ident beginTime endTime subtitle) = concat [show ident,
-                                                              "\n",
-                                                              show beginTime,
-                                                              " --> ",
-                                                              show endTime,
-                                                              "\n",
-                                                              subtitle,
-                                                              "\n"]
+    show (SRTLine ident beginTime endTime subtitle) = concat [ show ident
+                                                             , "\n"
+                                                             , show beginTime
+                                                             , " --> "
+                                                             , show endTime
+                                                             , "\n"
+                                                             , subtitle
+                                                             , "\n"
+                                                             ]
 
--- | Adds a time to a srt line.
-addTimeSRTLine :: Time -> SRTLine -> SRTLine
-addTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident nbegin nend sub
-    where nbegin = addTimes begin t
-          nend   = addTimes end t
-
--- | Subtracts a time to a srt line.
-subTimeSRTLine :: Time -> SRTLine -> SRTLine
-subTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident nbegin nend sub
-    where nbegin = subTimes begin t
-          nend   = subTimes end t
-
--- A srt file
+-- | An srt file
 newtype SRTFile = SRTFile {toLines :: [SRTLine]}
 
+-- | Applies a function to all the lines in the srt file.
 applyToSRTLine :: (SRTLine -> SRTLine) -> SRTFile -> SRTFile
 applyToSRTLine f file = SRTFile $ map f (toLines file)
 
--- Shows correctly an srt file.
+-- | Shows correctly an srt file.
 instance Show SRTFile where
     show = concatMap (\line -> show line ++ "\n") . toLines
 
@@ -131,29 +121,32 @@ comma = char ','
 arrow :: Parser String
 arrow = string "-->"
 
+int :: Parser Int
+int = many1 digit >>= return . read
+
 -- | Parses a time.
-parseTime :: Parser Time
-parseTime = do
-    hours <- parseIntegral
-    _ <- colon
-    minutes <- parseIntegral
-    _ <- colon
-    seconds <- parseIntegral
-    _ <- comma
-    milliseconds <- parseIntegral
+time :: Parser Time
+time = do
+    hours <- int
+    colon
+    minutes <- int
+    colon
+    seconds <- int
+    comma
+    milliseconds <- int
     return (Time hours minutes seconds milliseconds)
 
 -- | Parses an srt line.
 parseSRTLine :: Parser SRTLine
 parseSRTLine = do
-    index <- parseIntegral
-    _ <- newline
-    begin <- parseTime
-    _ <- spaces
-    _ <- arrow
-    _ <- spaces
-    end <- parseTime
-    _ <- newline
+    index <- int
+    newline
+    begin <- time
+    spaces
+    arrow
+    spaces
+    end <- time
+    newline
     sub <- manyTill anyChar (try (string "\n\n"))
     return (SRTLine index begin end sub)
 
@@ -171,4 +164,14 @@ extractSRTFile file =
 -- | Reads and parses an srt file.
 parseSRT :: FilePath -> IO SRTFile
 parseSRT file = readFile file >>= extractSRTFile >>= return
+
+-- | Delays an srt file.
+delaySRTFile :: Time -> SRTFile -> SRTFile
+delaySRTFile delay = applyToSRTLine (addTimeSRTLine delay)
+    where addTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident (addTimes begin t) (addTimes end t) sub
+
+-- | Forwards an srt file.
+forwardSRTFile :: Time -> SRTFile -> SRTFile
+forwardSRTFile delay = applyToSRTLine (subTimeSRTLine delay)
+    where subTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident (subTimes begin t) (subTimes end t) sub
 
