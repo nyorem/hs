@@ -1,3 +1,5 @@
+-- | Parser for XY files.
+
 module Parser ( parseFile ) where
 
 import Geometry
@@ -29,6 +31,7 @@ xy = do
 xyFile :: Parser [Point]
 xyFile = xy `endBy1` newline
 
+-- | Parses an XY file.
 parseFile :: FilePath -> IO [Point]
 parseFile filename = do
     contents <- readFile filename

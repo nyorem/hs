@@ -1,4 +1,6 @@
-module Main where
+-- | Main module.
+
+module Main ( main ) where
 
 import KMeans
 import Parser
@@ -47,12 +49,20 @@ render w assoc = do
 usage :: String -> String
 usage progName = unwords ["Usage:", progName, "nclusters filename"]
 
+-- | Parses the arguments:
+--
+-- * if nothing, then use a random point cloud with 2 clusters.
+--
+-- * if a number is provided, then use a random point with this number of clusters.
+--
+-- * if a number and a filepath are provided, then load the point cloud and use the given number of clusters.
 parseArgs :: String -> [String] -> (FilePath, Int)
 parseArgs _ [] = ("", 2)
 parseArgs _ [n] = ("", read n)
 parseArgs _ [n, filename] = (filename, read n)
 parseArgs progName _ = error $ usage progName
 
+-- | Main routine.
 main :: IO ()
 main = do
     args <- getArgs

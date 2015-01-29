@@ -1,9 +1,11 @@
+-- | 2D basic geometry stuff.
+
 module Geometry where
 
 import Graphics.Rendering.OpenGL ( GLfloat )
 
+-- | A 2D point.
 type Point = (GLfloat, GLfloat)
-type Vector = (GLfloat, GLfloat)
 
 -- | Multiplication by a scalar.
 (<**>) :: GLfloat -> Point -> Point
@@ -25,18 +27,6 @@ s <**> (x, y) = (s * x, s * y)
 (<.>) :: Point -> Point -> GLfloat
 (x, y) <.> (x', y') = x * x' + y * y'
 
--- | Unary minus for points.
-negateP :: Point -> Point
-negateP (x, y) = (-x, -y)
-
--- | Unary minus for vectors.
-negateV :: Vector -> Vector
-negateV (x, y) = (-x, -y)
-
--- | Determinant.
-det :: Point -> Point -> GLfloat
-det (x, y) (x', y') = x * y' - x' * y
-
 -- | Computes the squared norm of a point.
 squaredNorm :: Point -> GLfloat
 squaredNorm (x, y) = sqrt $ x * x + y * y
@@ -44,8 +34,4 @@ squaredNorm (x, y) = sqrt $ x * x + y * y
 -- | Squared distance between two points.
 squaredDist :: Point -> Point -> GLfloat
 squaredDist p q = squaredNorm $ p <-> q
-
--- | Normalizes a point.
-normalize :: Point -> Point
-normalize p = (recip $ sqrt (squaredNorm p)) <**> p
 
