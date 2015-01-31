@@ -1,0 +1,22 @@
+name:                subsurf
+version:             0.1.0
+license:             MIT
+license-file:        LICENSE
+author:              Jocelyn MEYRON
+maintainer:          Jocelyn.Meyron@ensimag.grenoble-inp.fr
+category:            Math
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable subsurf
+  main-is:             Main.hs
+  ghc-options:         -threaded -Wall
+  other-modules:       SubSurf.Examples,
+                       SubSurf.Geometry,
+                       SubSurf.Subdiv,
+                       SubSurf.Types
+  build-depends:       base >=4.7 && <4.8,
+                       gloss >= 1.9.2 && <2.0,
+                       vector >= 0.10.12 && <0.11
+  default-language:    Haskell2010
+
