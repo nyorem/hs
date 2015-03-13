@@ -3,7 +3,8 @@ Haskell stuff
 
 ### cis194
 
-solutions of [cis194](http://www.seas.upenn.edu/%7Ecis194/lectures.html) homeworks
+- [2013](http://www.seas.upenn.edu/~cis194/fall14/spring13/index.html)
+- [2015](http://www.seas.upenn.edu/~cis194/)
 
 ### euler
 
