@@ -26,3 +26,5 @@ some  utility programs:
 * *delaySRT*: add or subtract delay to a `srt` subtitles file
 * *kmeans*: (a not efficient) `kmeans` algorithm
 * *lsystem*: `L-system grammars` (koch curve, dragon curve)
+* *subsurf* : some 2d subdivision curves using `gloss`
+* *points-square*: generate points on lines / rectangles / cuboids as `xy` and `xyz` files

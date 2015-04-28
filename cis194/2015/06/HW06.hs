@@ -1,5 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -fno-warn-missing-methods #-}
+
+{-# LANGUAGE BangPatterns #-}
+
 module HW06 where
 
 import Data.List
@@ -95,15 +98,19 @@ minMaxSlow xs = Just (minimum xs, maximum xs)
 minMax :: [Int] -> Maybe (Int, Int)
 minMax [] = Nothing
 minMax (x:xs) =
-    Just $ foldr (\v (mm, m) -> let m' = if v > m then v else m
-                                    mm' = if v < mm then v else mm
-                                in (mm', m')) (x, x) xs
+    Just $ go (x, x) xs
+        where go (mm, m) [] = (mm, m)
+              go !(mm, m) (v:vs) =
+                  let m' = if v > m then v else m
+                      mm' = if v < mm then v else mm
+                  in
+                    go (mm', m') vs
 
 main :: IO ()
-main =
-    print $ minMaxSlow $ sTake 1000000 $ rand 7666532
 -- main =
---     print $ minMax $ sTake 1000000 $ rand 7666532
+--     print $ minMaxSlow $ sTake 1000000 $ rand 7666532
+main =
+    print $ minMax $ sTake 1000000 $ rand 7666532
 
 -- Exercise 10 ----------------------------------------
 
