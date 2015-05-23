@@ -1,8 +1,6 @@
-module SubSurf.Geometry
-where
+module SubSurf.Geometry where
 
-import Graphics.Gloss.Interface.Pure.Game
-
+import Graphics.Gloss
 import SubSurf.Types
 
 -- | Multiplication by a scalar.

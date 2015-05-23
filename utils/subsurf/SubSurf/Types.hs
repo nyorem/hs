@@ -1,8 +1,7 @@
-module SubSurf.Types
-where
+module SubSurf.Types where
 
 import qualified Data.Vector as V
-import Graphics.Gloss.Interface.Pure.Game
+import Graphics.Gloss
 
 type Coeff = [(Int, Float)]
 type Polygon = Path

@@ -1,15 +1,15 @@
-module SubSurf.Examples ( cornerCutting,
-                          chaikin,
-                          generalizedFourPoints,
-                          fourPoints,
-                          uniformSplines
-                        )
-where
+module SubSurf.Examples
+    ( cornerCutting
+    , chaikin
+    , generalizedFourPoints
+    , fourPoints
+    , uniformSplines
+    ) where
 
-import SubSurf.Subdiv
-import SubSurf.Geometry
-import SubSurf.Types
 import qualified Data.Vector as V
+import SubSurf.Geometry
+import SubSurf.Subdiv
+import SubSurf.Types
 
 cornerCutting :: Float -> Float -> Scheme
 cornerCutting a b  = ( [ (0, a), (1, 1 - a) ]

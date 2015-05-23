@@ -22,10 +22,10 @@ solutions of [99 Questions](http://www.haskell.org/haskellwiki/99_questions)
 
 some  utility programs:
 
-* *noiseAdd*: add noise to a point set described by an `xyz` file
 * *delaySRT*: add or subtract delay to a `srt` subtitles file
+* *genpoints*: generate points on lines / rectangles / circles / cuboids as `xy` and `xyz` files
 * *kmeans*: (a not efficient) `kmeans` algorithm
 * *lsystem*: `L-system grammars` (koch curve, dragon curve)
+* *noiseAdd*: add noise to a point set described by an `xyz` file
 * *subsurf* : some 2d subdivision curves using `gloss`
-* *genpoints*: generate points on lines / rectangles / circles / cuboids as `xy` and `xyz` files
 

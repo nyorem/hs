@@ -10,7 +10,7 @@ cabal-version:       >=1.10
 
 executable subsurf
   main-is:             Main.hs
-  ghc-options:         -threaded -Wall
+  ghc-options:         -O2 -threaded -Wall
   other-modules:       SubSurf.Examples,
                        SubSurf.Geometry,
                        SubSurf.Subdiv,

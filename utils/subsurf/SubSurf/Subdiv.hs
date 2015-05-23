@@ -1,11 +1,12 @@
-module SubSurf.Subdiv ( subdiv, (<!>) )
-where
-
-import SubSurf.Geometry
-import SubSurf.Types
+module SubSurf.Subdiv
+    ( subdiv
+    , (<!>)
+    ) where
 
 import qualified Data.Vector as V
 import Graphics.Gloss
+import SubSurf.Geometry
+import SubSurf.Types
 
 subdiv :: Scheme -> Points -> Points
 subdiv (a, b) points = V.concatMap (\i -> V.fromList [subdiv' a i points, subdiv' b i points]) $ V.enumFromN 0 len
