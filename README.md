@@ -8,7 +8,7 @@ Haskell stuff
 
 ### euler
 
-solutions of [Project Euler](http://projecteuler.net) problems
+Solutions of some [Project Euler](http://projecteuler.net) problems
 
 ### lyah
 
@@ -16,16 +16,17 @@ solutions of [Project Euler](http://projecteuler.net) problems
 
 ### ninety-nine
 
-solutions of [99 Questions](http://www.haskell.org/haskellwiki/99_questions)
+Solutions of some [99 Questions](http://www.haskell.org/haskellwiki/99_questions)
 
 ### utils
 
-some  utility programs:
+Some miscellaneous programs:
 
 * *delaySRT*: add or subtract delay to a `srt` subtitles file
 * *genpoints*: generate points on lines / rectangles / circles / cuboids as `xy` and `xyz` files
 * *kmeans*: (a not efficient) `kmeans` algorithm
-* *lsystem*: `L-system grammars` (koch curve, dragon curve)
+* *lsystem*: `L-system grammars` (Koch curve, dragon curve)
 * *noiseAdd*: add noise to a point set described by an `xyz` file
-* *subsurf* : some 2d subdivision curves using `gloss`
+* *subsurf* : some 2D subdivision curves using `gloss`
+* *xy-viewer* : a simple `gloss` based viewer for visualising 2D point clouds
 
