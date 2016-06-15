@@ -15,7 +15,7 @@ executable subsurf
                        SubSurf.Geometry,
                        SubSurf.Subdiv,
                        SubSurf.Types
-  build-depends:       base >=4.7 && <4.8,
+  build-depends:       base >=4.8 && <4.9,
                        gloss >= 1.9.2 && <2.0,
                        vector >= 0.10.12 && <0.11
   default-language:    Haskell2010

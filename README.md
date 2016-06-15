@@ -22,11 +22,12 @@ Solutions of some [99 Questions](http://www.haskell.org/haskellwiki/99_questions
 
 Some miscellaneous programs:
 
-* *delaySRT*: add or subtract delay to a `srt` subtitles file
+* *dict*: dictionary-like command line utility
 * *genpoints*: generate points on lines / rectangles / circles / cuboids as `xy` and `xyz` files
 * *kmeans*: (a not efficient) `kmeans` algorithm
 * *lsystem*: `L-system grammars` (Koch curve, dragon curve)
 * *noiseAdd*: add noise to a point set described by an `xyz` file
+* *srt*: shift an `srt` subtitles file
 * *subsurf* : some 2D subdivision curves using `gloss`
 * *xy-viewer* : a simple `gloss` based viewer for visualising 2D point clouds
 

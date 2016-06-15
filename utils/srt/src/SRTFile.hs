@@ -3,7 +3,7 @@
 module SRTFile ( Time
                , parseTime
                , isTimeNegative
-               , parseSRT
+               , extractSRTFile
                , delaySRTFile
                , forwardSRTFile
                )
@@ -12,8 +12,13 @@ where
 import Text.Parsec
 import Text.Parsec.String ( Parser )
 
+type Hours = Int
+type Minutes = Int
+type Seconds = Int
+type Milliseconds = Int
+
 -- | Time: HH:MM:SS,MMM
-data Time = Time Int Int Int Int
+data Time = Time Hours Minutes Seconds Milliseconds
 
 -- | Shows a number with a specific number of digits.
 showWithDigits :: Int -> Int -> String
@@ -58,7 +63,11 @@ convertFromMs t = Time h m s ms
           (ms, _) = helper ds 1
           helper a n = (b, d)
             where b = a `div` n
-                  d = a - b * n
+                  d = a `mod` n
+
+normalizeTime :: Time -> Time
+normalizeTime =
+    convertFromMs . convertToMs
 
 -- | Zips two times.
 zipTimes :: (Int -> Int -> Int) -> Time -> Time -> Time
@@ -84,6 +93,7 @@ subTimes = zipTimes subtract
 -- 00:00:01,020 --> 00:00:05,698
 -- Sync and corrections by n17t01
 -- www.addic7ed.com
+--
 
 -- | A 'line' of an srt file
 data SRTLine = SRTLine Int Time Time String
@@ -100,16 +110,16 @@ instance Show SRTLine where
                                                              , "\n"
                                                              ]
 
--- | An srt file
-newtype SRTFile = SRTFile {toLines :: [SRTLine]}
+-- | An 'SRTfile' is a list of 'SRTLine's.
+newtype SRTFile = SRTFile {unSRTFile :: [SRTLine]}
 
 -- | Applies a function to all the lines in the srt file.
 applyToSRTLine :: (SRTLine -> SRTLine) -> SRTFile -> SRTFile
-applyToSRTLine f file = SRTFile $ map f (toLines file)
+applyToSRTLine f = SRTFile . map f . unSRTFile
 
 -- | Shows correctly an srt file.
 instance Show SRTFile where
-    show = concatMap (\line -> show line ++ "\n") . toLines
+    show = concatMap (\line -> show line ++ "\n") . unSRTFile
 
 -- Parsing an srt file
 colon :: Parser Char
@@ -155,23 +165,23 @@ parseSRTFile :: Parser SRTFile
 parseSRTFile = many parseSRTLine >>= return . SRTFile
 
 extractSRTFile :: String -> IO SRTFile
-extractSRTFile file =
+extractSRTFile contents =
     case ret of
         Left err -> error $ show err
         Right srt -> return srt
-    where ret = parse parseSRTFile "" file
+    where ret = parse parseSRTFile "" contents
 
--- | Reads and parses an srt file.
-parseSRT :: FilePath -> IO SRTFile
-parseSRT file = readFile file >>= extractSRTFile >>= return
+applySRTFile :: (Time -> Time) -> SRTFile -> SRTFile
+applySRTFile f = applyToSRTLine f'
+    where f' (SRTLine ident begin end sub) = SRTLine ident (f begin) (f end) sub
 
 -- | Delays an srt file.
 delaySRTFile :: Time -> SRTFile -> SRTFile
-delaySRTFile delay = applyToSRTLine (addTimeSRTLine delay)
-    where addTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident (addTimes begin t) (addTimes end t) sub
+delaySRTFile delay =
+    applySRTFile (`addTimes` delay)
 
 -- | Forwards an srt file.
 forwardSRTFile :: Time -> SRTFile -> SRTFile
-forwardSRTFile delay = applyToSRTLine (subTimeSRTLine delay)
-    where subTimeSRTLine t (SRTLine ident begin end sub) = SRTLine ident (subTimes begin t) (subTimes end t) sub
+forwardSRTFile delay =
+    applySRTFile (delay `subTimes`)
 
