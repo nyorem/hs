@@ -14,3 +14,6 @@ crible :: (Integral a) => a -> [a]
 crible n = f [2..n] 2 n
 
 resBis = (crible 110000) !! (10001 - 1)
+
+main :: IO ()
+main = print resBis

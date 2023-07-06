@@ -5,3 +5,6 @@
 pythagore s = [[a, b, c] | c <- [1..s], b <- [1..c], a <- [1..b], a^2 + b^2 == c^2, a + b + c == s]
 
 res = product (head (pythagore 1000))
+
+main :: IO ()
+main = print res

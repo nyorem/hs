@@ -9,3 +9,5 @@ champernowne = concatMap show [ 0 .. ]
 
 res = product . map (\x -> digitToInt (champernowne !! x)) $ [ 10 ^ x | x <- [ 0 .. 6 ] ]
 
+main :: IO ()
+main = print res

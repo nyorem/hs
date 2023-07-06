@@ -22,3 +22,6 @@ find x n
 	      d = divisibleTo r n
 
 res = find 1 20
+
+main :: IO ()
+main = print res

@@ -5,3 +5,8 @@ sumSelf :: Integer -> Integer
 sumSelf n = sum $ map (\x -> x ^ x) [ 1 .. n ]
 
 res = reverse . take 10 . reverse . show $ sumSelf 1000
+
+main :: IO ()
+main = do
+  let x = read res :: Integer
+  print x

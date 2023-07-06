@@ -27,3 +27,6 @@ years :: [(Int, Int, Int)]
 years = [ (y, m, d) | y <- [1901 .. 2000], m <- [1 .. 12], d <- [1 .. numberOfDays m y] ]
 
 res = length . filter (\(y, m, d) -> (day y m d) == 0 && (d == 1)) $ years
+
+main :: IO ()
+main = print res

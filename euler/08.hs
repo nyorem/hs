@@ -25,3 +25,6 @@ prod str = prodAux str 1
 
 -- and finally take the maximum
 res = maximum (map prod (cut n))
+
+main :: IO ()
+main = print res

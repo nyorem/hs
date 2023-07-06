@@ -10,3 +10,6 @@ sumDigits [] = 0
 sumDigits (x:xs) = (sumDigits xs) + (read [x] :: Integer);
 
 res = sumDigits (show (fact 100))
+
+main :: IO ()
+main = print res

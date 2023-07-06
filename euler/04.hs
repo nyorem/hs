@@ -13,3 +13,6 @@ palindrome :: Integer -> Bool
 palindrome n = palindromeStr (show n)
 
 res = maximum (filter palindrome products)
+
+main :: IO ()
+main = print res

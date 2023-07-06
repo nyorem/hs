@@ -18,3 +18,5 @@ palindromeIn2And10 n = isPalindrome (show n) && isPalindrome (convertBase2 n)
 
 res = sum $ filter palindromeIn2And10 [ 1 .. 1000000]
 
+main :: IO ()
+main = print res

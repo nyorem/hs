@@ -9,3 +9,5 @@ sumDiagonal n = 4 * (2 * n + 1) ^ 2 - 12 * n + sumDiagonal (n - 1)
 
 res = sumDiagonal $ (1001 - 1) `div` 2
 
+main :: IO ()
+main = print res

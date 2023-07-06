@@ -6,3 +6,7 @@ import Data.List ( permutations, sort )
 perm = sort . permutations $ "0123456789"
 res = perm !! (1000000 - 1)
 
+main :: IO ()
+main = do
+  let x = read res :: Integer
+  print x

@@ -35,6 +35,5 @@ ab = abundants 28123
 res = sum $ filter (not . isSumAbundants ab) [ 1 .. 28123 ]
 
 main :: IO ()
-main = do
-    print res
+main = print res
 

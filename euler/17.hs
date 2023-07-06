@@ -56,3 +56,6 @@ sumNumbers :: Int -> Int
 sumNumbers n = sum . (map lengthNumber) $ [1 .. n]
 
 res = sumNumbers 1000
+
+main :: IO ()
+main = print res

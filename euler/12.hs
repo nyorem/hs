@@ -43,3 +43,6 @@ nbDivisors n = let decompo = transfoDecompo (primeDecompo n) in
 res = head (filter f (map g [1..]))
 	where g x = (x * (x + 1)) `div` 2
 	      f x = nbDivisors x >= 500
+
+main :: IO ()
+main = print res

@@ -13,3 +13,6 @@ numDigits :: Integer -> Int
 numDigits n = length $ show n
 
 res = (length $ takeWhile (\n -> numDigits n < 1000) $ map fibo [1..]) + 1
+
+main :: IO ()
+main = print res

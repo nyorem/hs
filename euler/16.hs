@@ -8,3 +8,6 @@ sumDigits [] = 0
 sumDigits (x:xs) = (sumDigits xs) + (read [x] :: Integer);
 
 res = sumDigits (show n)
+
+main :: IO ()
+main = print res

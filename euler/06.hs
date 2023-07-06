@@ -10,3 +10,6 @@ sum' n = (n * (n+1)) `div` 2
 res = (sum' 100)^2 - (sumSquares 100)
 
 -- we also could finish the calculus and obtain en explicit formula for res(n)
+
+main :: IO ()
+main = print res
